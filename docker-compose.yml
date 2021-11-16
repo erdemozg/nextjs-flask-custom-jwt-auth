@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+    backend:
+        build: 
+            context: ./backend
+            dockerfile: Dockerfile
+        ports:
+            - "5000:5000"
+        volumes: 
+            - ./backend:/backend
+            - ./db:/db
+        environment: 
+            - DB_FOLDER=/db
+            - JWT_SECRET=53c6ecd2-53ee-40de-b66d-e345249c4e85
+
+    frontend:
+        build: 
+            context: ./frontend
+            dockerfile: Dockerfile
+            args:
+                BACKEND_API_URL_ARG: "http://localhost:5000"
+        ports:
+            - "3000:3000"
+        depends_on:
+            - backend
