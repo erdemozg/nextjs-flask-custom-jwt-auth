@@ -11,8 +11,8 @@ const { publicRuntimeConfig } = getConfig();
  * it can also detect if the current access token is expired.
  * in case of an expired access token, it seamlessly calls refresh token endpoint to get a new access token and store it in state.
  * after refreshing the access token it sends the original request and returns the response.
- * if there's a problem with the acess token and it can't be refreshed, 
- * it's assumed as an unauthenticated request to a protected resource and user is redirected to the login page.
+ * if there's a problem with the access token and it can't be refreshed, 
+ * it's assumed as an unauthenticated request to a protected resource and the user is redirected to the login page.
  */
 export const fetchWrapper = {
   get,
@@ -119,10 +119,9 @@ async function refreshTokenAndRetryRequest(mainRequestUrl, mainRequestOptions) {
         result: mainRequestResponseObject
       };
     } else {
-      const error =
-        mainRequestResponseObject && mainRequestResponseObject.message ?
-        mainRequestResponseObject.message :
-        mainRequestResponse.statusText;
+      const error = mainRequestResponseObject && mainRequestResponseObject.message
+        ? mainRequestResponseObject.message 
+        : mainRequestResponse.statusText;
 
       return {
         ok: false,

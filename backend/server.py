@@ -1,6 +1,6 @@
+import uuid
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-import uuid
 from auth import authenticate, generate_access_token
 import business as business
 
@@ -69,7 +69,7 @@ def signup():
 api endpoint for user login.
 if credentials are valid it returns a user object containing access token.
 it also issues a http-only "refresh_token" cookie.
-clients are expected to call refresh token enpoint with this cookie present in order to obtain a new access token.
+clients are expected to call refresh token endpoint with this cookie present in order to obtain a new access token.
 if credentials are invalid an error message is returned with a proper status code.
 """
 @app.route("/login", methods=["POST"])
@@ -79,7 +79,7 @@ def login():
         ok, user_id = business.check_user_credentials(user_info["username"], user_info["password"])
         if ok:
             user = business.get_user_by_id(user_id)
-            encoded_jwt = generate_access_token(user["username"])
+            encoded_jwt = generate_access_token(user["id"])
             
             user_return_object = {
                 "id": user["id"],
@@ -100,7 +100,7 @@ def login():
 
 
 """
-api enpoint for logging out.
+api endpoint for logging out.
 removes refresh token from in-memory dict and clears refresh_token cookie.
 """
 @app.route("/logout", methods=["GET"])
@@ -114,9 +114,9 @@ def logout():
 
 
 """
-api enpoint for refreshing access token.
+api endpoint for refreshing access token.
 if a valid refresh token value is present in refresh_token cookie, it returns a user object containing a new access token.
-it also removes current refresh token, creates a new one and sets refresh_token cookie accordingly.
+it also removes the current refresh token, creates a new one and sets refresh_token cookie accordingly.
 if something's wrong with refresh_token cookie or its value, http status code 401 is returned.
 """
 @app.route("/refresh_token", methods=["GET"])
@@ -129,7 +129,7 @@ def refresh_token():
         abort(401, "refresh_token_invalid")
     else:
         user_object = refresh_tokens[refresh_token]
-        encoded_jwt = generate_access_token(user_object["username"])
+        encoded_jwt = generate_access_token(user_object["id"])
         
         user_return_object = {
             "id": user_object["id"],
@@ -147,14 +147,14 @@ def refresh_token():
 
 
 """
-api enpoint for fetching profile info.
+api endpoint for fetching profile info.
 requires authentication.
 this function is executed only if a valid access token is present in request headers.
 """
 @app.route("/profile", methods=["GET"])
 @authenticate
-def profile(username):
-    user = business.get_user_by_username(username)
+def profile(userid):
+    user = business.get_user_by_id(userid)
     return jsonify(user)
 
 

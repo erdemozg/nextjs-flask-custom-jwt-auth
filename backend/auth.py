@@ -5,7 +5,7 @@ from functools import wraps
 import jwt
 
 """
-this value is used to determine expiration date of access token.
+this value is used to determine the expiration date of the access token.
 clients are expected to refresh their access token after expiration.
 here it's set to a low value of 60 seconds for testing purposes.
 ideally it should be much longer.
@@ -22,7 +22,7 @@ jwt_secret = os.environ.get("JWT_SECRET", "default jwt secret value")
 """
 when used as a function decorator to an api endpoint,
 acts as a middleware to check http headers for a valid access token.
-if access token is ok it calls the enpoint with a user identifier.
+if the access token is ok it calls the endpoint with a user identifier.
 if a valid access token cannot be found it aborts the request with 401 status code.
 """
 def authenticate(action):
@@ -59,11 +59,11 @@ def authenticate(action):
 """
 generates an access token as a signed jwt that contains user identifier and expiration.
 """
-def generate_access_token(username):
+def generate_access_token(userid):
     iat = int(datetime.now().timestamp())
     exp = iat + access_token_validity_in_seconds
     jwt_token = {
-        "sub": username,
+        "sub": userid,
         "iat": iat,
         "exp": exp 
     }

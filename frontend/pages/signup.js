@@ -58,10 +58,7 @@ export default function SignUp() {
             setFormMessage({ message: "User created", type: "success" });
           } else {
             console.log(res);
-            setFormMessage({
-              message: "Something went wrong!",
-              type: "error",
-            });
+            setFormMessage({ message: "Something went wrong!", type: "error" });
           }
           setLoading(false);
         })

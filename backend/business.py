@@ -10,7 +10,7 @@ DB_FOLDER = os.environ.get("DB_FOLDER", ".")
 
 
 """
-create db connection.
+create a db connection.
 """
 def _get_db_connection():
     db_path = os.path.join(DB_FOLDER, 'db.sqlite3')
@@ -19,7 +19,7 @@ def _get_db_connection():
 
 
 """
-create db schema.
+create the db schema.
 """
 def create_db_schema():
     conn = _get_db_connection()

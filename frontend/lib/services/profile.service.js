@@ -6,7 +6,7 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}`;
 
 /**
  * contains a method to query user profile info.
- * demostrates the access to a protected api endpoint.
+ * demonstrates the access to a protected api endpoint.
  */
 export const profileService = {
   getProfile,
