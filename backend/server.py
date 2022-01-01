@@ -153,8 +153,8 @@ this function is executed only if a valid access token is present in request hea
 """
 @app.route("/profile", methods=["GET"])
 @authenticate
-def profile(userid):
-    user = business.get_user_by_id(userid)
+def profile(user_id):
+    user = business.get_user_by_id(user_id)
     return jsonify(user)
 
 

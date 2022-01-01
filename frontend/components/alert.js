@@ -25,7 +25,7 @@ export default function Alert({ message, type }) {
       {type === "success" && <CheckIcon className="h-6 w-6 mr-3" />}
       {type === "warning" && <ExclamationIcon className="h-6 w-6 mr-3" />}
       {type === "info" && <InfoIcon className="h-6 w-6 mr-3" />}
-      <span>{message}</span>
+      <span>{message.toString()}</span>
     </div>
   );
 }

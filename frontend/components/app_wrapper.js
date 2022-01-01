@@ -12,28 +12,28 @@ import Layout from "./layout";
 */
 export default function AppWrapper({ children, authenticate }) {
   const user = useAppSelector(selectUser);
-  const [refreshTokenCheckFinished, setRefreshTokenCheckFinished] = useState(false);
+  const [tokenRefreshInProgress, setTokenRefreshInProgress] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     authService
       .refreshToken()
       .then((user) => {
-        setRefreshTokenCheckFinished(true);
+        setTokenRefreshInProgress(false);
       })
       .catch((error) => {
         console.log(error);
-        setRefreshTokenCheckFinished(true);
+        setTokenRefreshInProgress(false);
       });
   }, []);
 
   useEffect(() => {
-    if (refreshTokenCheckFinished && authenticate && !user.id) {
+    if (!tokenRefreshInProgress && authenticate && !user.id) {
       router.push("/login");
     }
-  }, [refreshTokenCheckFinished]);
+  });
 
-  return refreshTokenCheckFinished && (!authenticate || !!user.id) ? (
+  return !tokenRefreshInProgress && (!authenticate || !!user.id) ? (
     <Layout>{children}</Layout>
   ) : null;
 }

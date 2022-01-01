@@ -43,16 +43,15 @@ def authenticate(action):
                 if len(jwt_token) == 0:
                     abort(401, 'access_token_invalid')
                 else:
+                    user_id = None
+                    
                     try:
                         jwt_decoded = jwt.decode(jwt_token, jwt_secret, algorithms=["HS256"])
-                        username = jwt_decoded["sub"]
-                        return action(username, *args, **kwargs)
-                    except jwt.exceptions.ExpiredSignatureError:
-                        abort(401, "access_token_invalid")
-                    except jwt.exceptions.InvalidSignatureError:
-                        abort(401, "access_token_invalid")
+                        user_id = jwt_decoded["sub"]
                     except:
                         abort(401, "access_token_invalid")
+                    
+                    return action(user_id, *args, **kwargs)
     return decorator
 
 
